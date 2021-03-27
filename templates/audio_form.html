@@ -43,7 +43,7 @@
         src="https://cdn0.iconfinder.com/data/icons/health-care-21/128/2-512.png"
       />
     </div>
-    <form>
+    <form form method="post" action="/audio-form-upload" enctype="multipart/form-data">
     <h3 id="main-heading">COVID-19 Audio Description Form</h3>
       <div class="alert alert-info alert-dismissible">
         <a href="#" class="close" data-dismiss="alert" aria-label="close"
@@ -51,22 +51,19 @@
         >
         <strong>Info!</strong> Please feel free to record the description of your symptoms in a single sentence and then press stop to send the recording.
       </div>
-      <!-- <div class="alert alert-warning alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close"
-          >&times;</a
-        >
-        <strong>Warning!</strong> The data entered here will be open-source.
-      </div> -->
-    <p>
-      <button id="btnStart"><img src="../static/images/microphone.png"/></button>
-           
-      <button id="btnStop"><img src="../static/images/stop-button.png"/></button>
-    </p>
-    
-    
-  </form>
-    <!-- <audio id="adioPlay" controls></audio> -->
+      
+      <button type="button" id="recordButton"><img src="../static/images/microphone.png"/></button>
+      <button type="button" id="pauseButton" disabled><img src="../static/images/pause.png"/></button>
+      <button type="button" id="stopButton" disabled><img src="../static/images/stop-button.png"/></button>
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <button class="btnContact" type="submit">Submit</button>
+    </form>
   </div>
 </body>
+<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
 <script src="{{url_for('static', filename='javascript/audio_form.js')}}"></script>
 {% endblock %}

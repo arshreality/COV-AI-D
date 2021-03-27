@@ -1,16 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
-import smtplib, ssl, email
+import smtplib
+import ssl
+import email
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from fpdf import FPDF 
+from fpdf import FPDF
 from datetime import datetime
 from keras.preprocessing import image
 from keras.models import load_model
 import numpy as np
+import openai
+import speech_recognition as sr
+import pyttsx3
 
 # import json
 
@@ -102,46 +107,46 @@ def create_pdf(id, email, age, sex, result, report_type):
 
     if report_type == "patient":
         if result <= 0.5:
-            text1 = "Since the chances of you having COVID-19 based on your clinical information are greater than 50%, we"    
+            text1 = "Since the chances of you having COVID-19 based on your clinical information are greater than 50%, we"
             text2 = "recommend that you immeditaely visit the nearest hospital and consult the physician."
             text3 = ""
 
         else:
-            text1 = "Since the chances of you having COVID-19 based on your clinical information are less than 50%, we"    
+            text1 = "Since the chances of you having COVID-19 based on your clinical information are less than 50%, we"
             text2 = "recommend that you quarantine for at least the next week and monitor any developments."
             text3 = "It is recommended that you fill this form again and get the diagnosis based on your new symptoms."
 
     else:
         if result <= 0.5:
-            text1 = "Since the chances of the patient having COVID-19 based on the CT scan are greater than 50%, we"    
+            text1 = "Since the chances of the patient having COVID-19 based on the CT scan are greater than 50%, we"
             text2 = "recommend immediate consultation with a radiologist."
             text3 = ""
 
         else:
-            text1 = "Since the chances of the patients having COVID-19 based on the CT scan are less than 50%, we"    
+            text1 = "Since the chances of the patients having COVID-19 based on the CT scan are less than 50%, we"
             text2 = "recommend that they quarantine for at least the next week and monitor any developments."
             text3 = "It is recommended that they fill this form again and get the diagnosis based on their new symptoms."
 
     pdf.cell(0, 25, text1)
     pdf.cell(0, 5, "", 0, 1)
-    pdf.cell(0, 25, text2)
+    pdf.cell(0, 25, text2) 
     pdf.cell(0, 5, "", 0, 1)
     pdf.cell(0, 5, "", 0, 1)
     pdf.cell(0, 25, text3)
 
     if report_type == "technician":
-        pdf.image("temp.png", x = 45, y = 150, w = 128, h = 128)
-    
+        pdf.image("temp.png", x=45, y=150, w=128, h=128)
+
         pdf.cell(0, 10, "", 0, 1)
         pdf.set_font("Times", "B", 12)
-        pdf.cell(0, 25, "Preliminary AP scanogram of the chest was obtained. Contiguous axial scans of slice thickness 1 mm")
+        pdf.cell(
+            0, 25, "Preliminary AP scanogram of the chest was obtained. Contiguous axial scans of slice thickness 1 mm")
 
         pdf.cell(0, 5, "", 0, 1)
         pdf.cell(0, 25, "were taken from the root of thoracic inlet till the posterior costophrenic recesses, at interval of 10mm.")
-    
+        os.remove("temp.png")
 
-    pdf.output("document.pdf")  
-
+    pdf.output("document.pdf")
 
 def email_to_user(receiver_email):
     port = 465  # For SSL
@@ -151,7 +156,7 @@ def email_to_user(receiver_email):
     context = ssl.create_default_context()
 
     subject = "Here's your report from COV-AI-D, we hope this helps you :)"
-    body = "Greetings,\nPlease find attached the report we created using our AI model based on your data input on www.covaid.tech\n\nWe hope this helps you and your patient.\nThank you,\nTeam COV-AI-D\nAbhyu & Arsh"
+    body = "Greetings,\nPlease find attached the report we created using our AI model based on your data input on www.covaid.tech\n\nWe hope this helps you and your patient.\nThank you,\nTeam COV-AI-D\nShubh & Arsh"
     sender_email = "covaid.report@gmail.com"
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
@@ -170,7 +175,7 @@ def email_to_user(receiver_email):
         part = MIMEBase("application", "octet-stream")
         part.set_payload(attachment.read())
 
-    # Encode file in ASCII characters to send by email    
+    # Encode file in ASCII characters to send by email
     encoders.encode_base64(part)
 
     # Add header as key/value pair to attachment part
@@ -186,6 +191,9 @@ def email_to_user(receiver_email):
     with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
         server.login("covaid.report@gmail.com", password)
         server.sendmail(sender_email, receiver_email, text)
+    
+    os.remove("document.pdf")
+
 
 def model_result(ct_scan_blob):
     model = load_model('my_model.h5')
@@ -193,10 +201,11 @@ def model_result(ct_scan_blob):
     with open('temp.png', 'wb') as file:
         file.write(ct_scan_blob)
 
-    test_image = image.load_img('temp.png', target_size = (64, 64))
+    test_image = image.load_img('temp.png', target_size=(64, 64))
     test_image = image.img_to_array(test_image)
-    test_image = np.expand_dims(test_image, axis = 0)
+    test_image = np.expand_dims(test_image, axis=0)
     return model.predict(test_image)
+
 
 def str_to_bool(s):
     if s == 'True':
@@ -205,6 +214,7 @@ def str_to_bool(s):
         return False
     elif s == "null":
         return None
+
 
 class ClinicalData(db.Model):
     # Demographics
@@ -289,6 +299,51 @@ def audio_form():
     return render_template('audio_form.html')
 
 
+@app.route('/audio-form-upload', methods=['POST'])
+def audio_form_upload():
+    r = sr.Recognizer()
+    path_to_audio_file = "C:\\Users\\arsh\\Downloads\\audio.wav"
+    with sr.AudioFile(path_to_audio_file) as source:
+        # listen for the data (load audio to memory)
+        audio_data = r.record(source)
+        # recognize (convert from speech to text)
+        text = r.recognize_google(audio_data)
+        print(text, flush=True)
+
+    os.remove(path_to_audio_file)
+    openai.api_key = "sk-2jRMD9G0ojitxcVNfUCtBaE6OVcrju2WQ4Xxs43w"
+    res = openai.Classification.create(
+        search_model="ada",
+        model="curie",
+        examples=[
+            ["Hello! I am a 23-year-old male I am 1.65 m tall and weigh 65 kg. Recently my sleeping pattern has been all over the place. I am also losing my appetite and have not been having proper bowel movements as of late. I  drink alcohol weekly and also use tobacco products every day. I have recently developed Headaches, difficulty in breathing, cough, cold, mild chills, Chest pain. I have also lost my sense of smell and taste.", "Positive"],
+            ["Hello! I am a 23-year-old female. I am 1.6 m tall and weigh 62 kg. I  drink alcohol monthly and even use tobacco products occasionally. I have started to produce this random sound when I breathe. I also have diarrhea, fever. My voice is getting rough and I also have constant muscle ache.", "Positive"],
+            ["Hello! I am a 26-year-old male. I am 1.75 m tall and weigh 82 kg. Recently my sleeping pattern has been all over the place. I am also losing my appetite and have not been having proper bowel movements as of late. I  do not drink alcohol and don't use tobacco products. I don't have any symptoms of covid.", "Negative"],
+            ["Hello! I am a 21-year-old male. I am 1.8 m tall and weigh 80 kg. I have recently developed Headaches, difficulty in breathing, cough, cold, mild chills, Chest pain. I have also lost my sense of smell and taste.", "Positive"],
+            ["Hello! I am a 24-year-old male. I am 1.6 m tall and weigh 58 kg. I  drink alcohol monthly and even use tobacco products occasionally. I have started to produce this random sound when I breathe. I also have diarrhea, fever. My voice is getting rough and I also have constant muscle ache.", "Positive"],
+            ["Hello! I am a 22-year-old male. I am 1.65 m tall and weigh 70 kg. Recently my sleeping pattern has been all over the place. I am also losing my appetite and have not been having proper bowel movements as of late. I  drink alcohol weekly and also use tobacco products every day. I have recently developed Headaches, difficulty in breathing, cough, cold, mild chills, Chest pain. I have also lost my sense of smell and taste.", "Positive"],
+            ["Hello! I am a 26-year-old male. I am 1.75 m tall and weigh 82 kg. Recently my sleeping pattern has been all over the place. I am also losing my appetite and have not been having proper bowel movements as of late. I  do not drink alcohol and don't use tobacco products. I don't have any symptoms of covid or hematuria (random bleeding).", "Negative"]
+        ],
+        query=text,
+        labels=["Positive", "Negative"],
+    )
+
+    email_ = "arshdeep74644@gmail.com"
+    age_ = "100"
+    gender_ = "Male"
+
+    if res.label == "Positive":
+        result = 1
+    else:
+        result = 0
+
+    create_pdf("2", email_, age_, gender_.title(),
+               result, report_type="patient")
+    email_to_user(email_)
+
+    return redirect(url_for('landing_page'))
+
+
 @app.route('/formimages')
 def formimages():
     return render_template('form_images.html')
@@ -313,7 +368,8 @@ def ctupload():
     age_ = str(ClinicalData.query.filter(ClinicalData.id == id_).first().age)
     sex_ = ClinicalData.query.filter(ClinicalData.id == id_).first().gender
 
-    num_rows_updated = ClinicalData.query.filter_by(id=id_).update(dict(ct_scan=ct_scan_blob))
+    num_rows_updated = ClinicalData.query.filter_by(
+        id=id_).update(dict(ct_scan=ct_scan_blob))
     db.session.commit()
 
     result = float(model_result(ct_scan_blob))
@@ -446,7 +502,7 @@ def clinicalupload():
     saved = True
 
     id_ = str(obj.id)
-    create_pdf(id_, email_, age_, gender_.title(), 0.2, report_type = "patient")
+    create_pdf(id_, email_, age_, gender_.title(), 0.2, report_type="patient")
     email_to_user(email_)
     return redirect(url_for('landing_page'))
 

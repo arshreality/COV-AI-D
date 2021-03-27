@@ -95,7 +95,7 @@ h4 {
   color: #0062cc;
 }
 
-.contact-form .btnContact {
+.btnContact {
   width: 100%;
   border: none;
   border-radius: 1rem;
@@ -144,15 +144,19 @@ figure:hover > img {
   border: 5px black solid;
 }
 
-#btnStart {
-  margin-left: 323px;
+#recordButton {
+  margin-left: 284px;
 }
 
-#btnStart img {
+#recordButton img {
   height: 66px;
 }
 
-#btnStop img {
+#pauseButton img {
+  height: 66px;
+}
+
+#stopButton img {
   height: 66px;
 }
 

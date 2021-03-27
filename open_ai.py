@@ -1,5 +1,4 @@
 import openai
-import requests
 openai.api_key = "sk-2jRMD9G0ojitxcVNfUCtBaE6OVcrju2WQ4Xxs43w"
 a = openai.Classification.create(
     search_model="ada",
@@ -17,4 +16,5 @@ a = openai.Classification.create(
     labels=["Positive", "Negative"],
 )
 
-print(a)
+print(type(a))
+print(a.label)
