@@ -1,0 +1,72 @@
+{% extends "base.html" %} {% block content %}
+<head>
+  <title>COVID-19|Audio Description Form</title>
+
+  <link
+    href="{{ url_for('static', filename='styles/audio_form.css') }}"
+    rel="stylesheet"
+    type="text/css"
+  />
+
+</head>
+<body>
+
+  <nav id ="navbar" class=" navbar navbar-expand navbar-light align-items-start">
+    <div class="container d-flex justify-content-center align-items-start figs">
+        <div class="row align-items-start">
+            <a href="/form">
+                <figure class="item">
+                    <img class="imgNavbar" src="../static/images/forms.png"/>
+                    <figcaption class="caption">Form</figcaption>
+                </figure>
+            </a>
+            <a href="/">
+                <figure class="item">
+                    <img class="imgNavbar" src="../static/images/covid-19.jpg"/>
+                    <figcaption class="caption">Home</figcaption>
+                </figure>
+            </a>
+            <a href="/twitter">
+                <figure class="item"> 
+                    <img class="imgNavbar" src="../static/images/twitter.jpg"/>
+                    <figcaption class="caption">Twitter</figcaption>
+                </figure>
+            </a>
+        </div>
+        </div>
+    </div>
+</nav>
+  <div class="container contact-form">
+    <div class="contact-image">
+      <img
+        id="heart"
+        src="https://cdn0.iconfinder.com/data/icons/health-care-21/128/2-512.png"
+      />
+    </div>
+    <form>
+    <h3 id="main-heading">COVID-19 Audio Description Form</h3>
+      <div class="alert alert-info alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"
+          >&times;</a
+        >
+        <strong>Info!</strong> Please feel free to record the description of your symptoms in a single sentence and then press stop to send the recording.
+      </div>
+      <!-- <div class="alert alert-warning alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"
+          >&times;</a
+        >
+        <strong>Warning!</strong> The data entered here will be open-source.
+      </div> -->
+    <p>
+      <button id="btnStart"><img src="../static/images/microphone.png"/></button>
+           
+      <button id="btnStop"><img src="../static/images/stop-button.png"/></button>
+    </p>
+    
+    
+  </form>
+    <!-- <audio id="adioPlay" controls></audio> -->
+  </div>
+</body>
+<script src="{{url_for('static', filename='javascript/audio_form.js')}}"></script>
+{% endblock %}

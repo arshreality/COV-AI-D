@@ -1,0 +1,236 @@
+{% extends "base.html" %} {% block content %}
+<head>
+  <title>COVID-19|Twitter</title>
+
+  <link
+    href="{{ url_for('static', filename='styles/twitter.css') }}"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+  
+</head>
+<body>
+  <nav id ="navbar" class=" navbar navbar-expand navbar-light align-items-start">
+    <div class="container d-flex justify-content-center align-items-start figs">
+        <div class="row align-items-start">
+          <a href="/form">
+              <figure class="item">
+                  <img class="imgNavbar" src="../static/images/forms.png"/>
+                  <figcaption class="caption">Form</figcaption>
+              </figure>
+          </a>
+          <a href="/">
+            <figure class="item">
+                <img class="imgNavbar" src="../static/images/covid-19.jpg"/>
+                <figcaption class="caption">Home</figcaption>
+            </figure>
+          </a>
+            
+            <a href="/twitter">
+                <figure class="item"> 
+                    <img class="imgNavbar" src="../static/images/twitter.jpg"/>
+                    <figcaption class="caption">Twitter</figcaption>
+                </figure>
+            </a>
+        </div>
+        </div>
+    </div>
+</nav>
+
+
+
+  <div id="overlay">
+    <div class="container-fluid d-flex h-100 flex-column">
+      <div class="row" style="height: 100%;">
+        <div class="col-lg-4 h-100 d-table">
+          <div class="card-body d-table-cell align-middle">
+            <div id="myBtn1" class="overlayButtons text-center">
+              Health Organizations
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 h-100 d-table">
+          <div class="card-body d-table-cell align-middle">
+            <div id="myBtn2" class="overlayButtons text-center">
+              Leaders of Countries
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 h-100 d-table">
+          <div class="card-body d-table-cell align-middle">
+            <div id="myBtn3" class="overlayButtons text-center">
+              OPed Experiences
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="footer" onclick="off()">
+      <p>Show All</p>
+      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+    </div>
+  </div>
+
+
+
+  <div class="container-fluid d-flex h-100 flex-column">
+    <div class="row">
+      <div class="col-lg-4">
+        <div id="rcorners1">
+          <h1 class ="justify-content-center" style="text-align: center"><mark>Health Organisations</mark></h1>
+          <a
+            class="twitter-timeline"
+            data-lang="en"
+            data-height="5000"
+            data-dnt="true"
+            data-chrome="noheader, noborders, transparent, noscrollbar"
+            href="https://twitter.com/arshreality/lists/covid-19?ref_src=twsrc%5Etfw"
+          ></a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div id="rcorners1">
+          <h1 class ="justify-content-center" style="text-align: center"><mark>Leaders</mark></h1>
+          <div class="row">
+            <div class="col-lg-4">
+              {%for country in countries1%}
+              <div class="row" style="justify-content: center;">
+                <button class="button" style="vertical-align: right;">
+                  <span>{{country}} </span>
+                </button>
+              </div>
+              {%endfor%}
+            </div>
+            <div class="col-lg-4">
+              {%for country in countries2%}
+              <div class="row" style="justify-content: center;">
+                <button class="button" style="vertical-align: right;">
+                  <span>{{country}} </span>
+                </button>
+              </div>
+              {%endfor%}
+            </div>
+            <div class="col-lg-4">
+              {%for country in countries3%}
+              <div class="row" style="justify-content: center;">
+                <button class="button" style="vertical-align: right;">
+                  <span>{{country}} </span>
+                </button>
+              </div>
+              {%endfor%}
+            </div>
+          </div>
+          <div class="row">
+            <div id="leaders" class="col-10 col-sm-12">
+              <a
+                class="twitter-timeline"
+                data-chrome="noheader, noborders, transparent, noscrollbar"
+                data-height="4750"
+                href="https://twitter.com/realDonaldTrump?ref_src=twsrc%5Etfw"
+                >Tweets by realDonaldTrump</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div id="rcorners1">
+          <h1 class ="justify-content-center"><mark>OP-ed</mark></h1>
+          <div class="row">
+            <a
+              class="twitter-timeline"
+              data-chrome="noheader, noborders, transparent, noscrollbar"
+              data-height="5000"
+              href="https://twitter.com/tweets_covid?ref_src=twsrc%5Etfw"
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="myModal1" class="modal">
+    <div class="modal-content">
+      <span class="close1">Close &times;</span>
+      <a
+        class="twitter-timeline"
+        data-lang="en"
+        data-dnt="true"
+        data-chrome="noheader, noborders, transparent"
+        href="https://twitter.com/arshreality/lists/covid-19?ref_src=twsrc%5Etfw"
+      ></a>
+    </div>
+  </div>
+  <div id="myModal2" class="modal">
+    <div class="modal-content">
+      <span class="close2">Close &times;</span>
+      <div class="row">
+        <div class="col-lg-4">
+          {%for country in countries1%}
+          <div class="row" style="justify-content: center;">
+            <button class="buttonModal" style="vertical-align: right;">
+              <span>{{country}} </span>
+            </button>
+          </div>
+          {%endfor%}
+        </div>
+        <div class="col-lg-4">
+          {%for country in countries2%}
+          <div class="row" style="justify-content: center;">
+            <button class="buttonModal" style="vertical-align: right;">
+              <span>{{country}} </span>
+            </button>
+          </div>
+          {%endfor%}
+        </div>
+        <div class="col-lg-4">
+          {%for country in countries3%}
+          <div class="row" style="justify-content: center;">
+            <button class="buttonModal" style="vertical-align: right;">
+              <span>{{country}} </span>
+            </button>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+      <div class="row">
+        <div id="leadersModal" class="col-10 col-sm-12">
+          <a
+            class="twitter-timeline"
+            data-chrome="noheader, noborders, transparent"
+            href="https://twitter.com/realDonaldTrump?ref_src=twsrc%5Etfw"
+            >Tweets by realDonaldTrump</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+    <div id="myModal3" class="modal">
+      <div class="modal-content">
+        <span class="close3">Close &times;</span>
+        <a
+          class="twitter-timeline"
+          data-chrome="noheader, noborders, transparent"
+          data-height="5000"
+          href="https://twitter.com/tweets_covid?ref_src=twsrc%5Etfw"
+        ></a>
+      </div>
+    </div>
+  </div>
+  <script src="{{url_for('static', filename='javascript/twitter.js')}}"></script>
+
+  <script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charset="utf-8"
+  ></script>
+</body>
+{% endblock %}
