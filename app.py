@@ -41,6 +41,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/arsh/Desktop/Develop
 db = SQLAlchemy(app)
 
 saved = False
+text = ''
 
 def create_pdf(id, email, age, sex, result, report_type):
     pdf = FPDF(orientation='P', unit='mm', format='A4')
@@ -105,7 +106,7 @@ def create_pdf(id, email, age, sex, result, report_type):
 
     pdf.set_font("Times", "", 12)
 
-    if report_type == "patient":
+    if report_type != "technician":
         if result <= 0.5:
             text1 = "Since the chances of you having COVID-19 based on your clinical information are greater than 50%, we"
             text2 = "recommend that you immeditaely visit the nearest hospital and consult the physician."
@@ -133,6 +134,31 @@ def create_pdf(id, email, age, sex, result, report_type):
     pdf.cell(0, 5, "", 0, 1)
     pdf.cell(0, 5, "", 0, 1)
     pdf.cell(0, 25, text3)
+
+    pdf.cell(0, 5, "", 0, 1)
+    pdf.cell(0, 5, "", 0, 1)
+
+
+    if report_type == "audio_patient":
+        global text
+
+        pdf.set_font("Times", "B", 14)
+        pdf.cell(100, 25, "What audio did we receive? (Try again if most of the text is incorrect)")
+        pdf.cell(0, 5, "", 0, 1)
+
+        pdf.set_font("Times", "", 12)
+
+        length = len(text)
+        temp = 0
+        for i in range(0, length, 92):
+            if length < 92:
+                pdf.cell(0, 25, text)
+                pdf.cell(0, 5, "", 0, 1)
+            else:
+                temp += 92
+                pdf.cell(0, 25, text[:temp])
+                pdf.cell(0, 5, "", 0, 1)
+
 
     if report_type == "technician":
         pdf.image("temp.png", x=45, y=150, w=128, h=128)
@@ -301,6 +327,7 @@ def audio_form():
 
 @app.route('/audio-form-upload', methods=['POST'])
 def audio_form_upload():
+    global text
     r = sr.Recognizer()
     path_to_audio_file = "C:\\Users\\arsh\\Downloads\\audio.wav"
     with sr.AudioFile(path_to_audio_file) as source:
@@ -337,7 +364,7 @@ def audio_form_upload():
     else:
         result = 0
 
-    create_pdf("2", email_, age_, gender_, result, report_type="patient")
+    create_pdf("2", email_, age_, gender_, result, report_type="audio_patient")
     email_to_user(email_)
 
     return redirect(url_for('landing_page'))
