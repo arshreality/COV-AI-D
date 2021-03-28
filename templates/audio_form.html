@@ -26,12 +26,12 @@
                     <figcaption class="caption">Home</figcaption>
                 </figure>
             </a>
-            <a href="/twitter">
-                <figure class="item"> 
-                    <img class="imgNavbar" src="../static/images/twitter.jpg"/>
-                    <figcaption class="caption">Twitter</figcaption>
-                </figure>
-            </a>
+            <a href="/audio-form">
+              <figure class="item"> 
+                  <img class="imgNavbar" src="../static/images/headphone.png"/>
+                  <figcaption class="caption">Audio Form</figcaption>
+              </figure>
+          </a>
         </div>
         </div>
     </div>
@@ -60,7 +60,37 @@
       <br>
       <br>
       <br>
-      <button class="btnContact" type="submit">Submit</button>
+      <div
+            aria-labelledby="myModalLabel"
+            class="modal fade"
+            id="overlayModal"
+            role="dialog"
+            tabindex="-1"
+          >
+          <div class="pdf-overlay">
+            <div class="pdf">
+            <iframe width="85%" height="900px"></iframe>
+                <div class="form-group">
+                  <button type="submit" class="submit">Submit</button>
+                  <div style="overflow: hidden; padding-right: .5em;">
+                    <input type="email" id="inputEmail" name="email" placeholder="Email" style="width: 100%;" />
+                  </div>                    
+                  </div>
+            </div>
+          </div>
+          </div>
+          <div class="form-group">
+            <button
+              data-toggle="modal"
+              data-target="#overlayModal"
+              name="btnSubmit"
+              class="btnContact"
+              style="text-align: center;"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
     </form>
   </div>
 </body>

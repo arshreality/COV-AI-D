@@ -204,7 +204,6 @@ function stopRecording() {
   recordButton.disabled = false;
   pauseButton.disabled = true;
 
-
   //tell the recorder to stop the recording
   rec.stop();
 
@@ -215,7 +214,7 @@ function stopRecording() {
   rec.exportWAV(createDownloadLink);
 }
 
-function createDownloadLink(blob) {
+async function createDownloadLink(blob) {
   var url = URL.createObjectURL(blob);
   var link = document.createElement("a");
 
@@ -226,4 +225,7 @@ function createDownloadLink(blob) {
   link.href = url;
   link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
   link.click();
+  await sleep(10000);
+  var iframe = document.getElementsByTagName("iframe")[0];
+  iframe.src = "{{url_for('static', filename='document.pdf')}}#toolbar=0";
 }

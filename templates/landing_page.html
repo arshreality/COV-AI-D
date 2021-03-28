@@ -6,38 +6,7 @@
         rel="stylesheet"
         type="text/css"
       />    </head>
-    <body>
-        
-        {% if saved %}
-
-        
-    <div
-    class="modal fade"
-    id="removeUser"
-    role="dialog"
-    tabindex="-1"
-    >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="alert">
-                Your form has been saved, thank you for taking the time to fill it out :)
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button
-                class="btn"
-                data-dismiss="modal"
-                id="remove-button"
-                type="button"
-              >
-                Go to Home
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endif %}        
+    <body>      
         <div class="whatdiv">
             <p class ="d-flex justify-content-center heading-quest align-items-bottom mb-4">Welcome to COV-AI-D!</p>
             <nav id ="navbar" class=" navbar navbar-expand navbar-light align-items-start">
@@ -55,14 +24,12 @@
                             <figcaption class="caption">Home</figcaption>
                         </figure>
                     </a>
-                        
-
-                        <a href="/twitter">
-                            <figure class="item"> 
-                                <img class="img" src="../static/images/twitter.jpg"/>
-                                <figcaption class="caption">Twitter Feed</figcaption>
-                            </figure>
-                        </a>
+                    <a href="/audio-form">
+                      <figure class="item"> 
+                          <img class="imgNavbar" src="../static/images/headphone.png"/>
+                          <figcaption class="caption">Audio Form</figcaption>
+                      </figure>
+                  </a>
                     </div>
                     </div>
                 </div>
