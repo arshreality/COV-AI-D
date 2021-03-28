@@ -13,22 +13,22 @@ Importantly, early diagnosis of COVID-19 is of critical clinical importance sinc
 Our Project has 3 stages that it operates in.
 
 First and foremost is the data collection. The patient and the doctor can decide on the way to collect the required data. They can either use the very detailed written form, 
-![Image of Written Form](https://github.com/arshreality/COV-AI-D/tree/main/images/data-form.png)
+![Image of Written Form](https://github.com/arshreality/COV-AI-D/blob/main/images/data-form.png)
 
 or the patient can talk about their habits and symptoms and our speech recognition algorithm will take care of the rest.
-![Image of Audio Form](https://github.com/arshreality/COV-AI-D/tree/main/images/audio_form.png)
+![Image of Audio Form](https://github.com/arshreality/COV-AI-D/blob/main/images/audio_form.png)
 
 The app then uses  _**OpenAI**_ to compare the data against many recorded backgrounds and symptoms to give a prediction of the Covid test Result.
  
 In case of a high probability of a positive result, the hospital technician can issue a CT scan of the patient's chest. Which can be fed into our convolutional neural network, to automatically decide whether the patient has covid or not. 
-![Sample CT scan](https://github.com/arshreality/COV-AI-D/tree/main/images/CTscan.png)
+![Sample CT scan](https://github.com/arshreality/COV-AI-D/blob/main/images/CTscan.png)
 
 
 Eliminating the need for a specialized doctor like a radiologist in most cases.
 
 Patients and Technicians can obtain the results at any point in the process through a PDF.
 
-![Image of Sample PDF](https://github.com/arshreality/COV-AI-D/tree/main/images/sample-Email.png)
+![Image of Sample PDF](https://github.com/arshreality/COV-AI-D/blob/main/images/sample-Email.png)
 
 Technologies Used:
 - SQLite
