@@ -33,6 +33,8 @@ Patients and Technicians can obtain the results at any point in the process thro
 Technologies Used:
 - SQLite
 - Flask
+- HTML
 - JavaScript
 - CSS
-- Linux Server
+- Keras
+- OpenAI
