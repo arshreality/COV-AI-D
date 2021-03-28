@@ -144,9 +144,9 @@ def create_pdf(id, email, age, sex, result, report_type):
 
         pdf.cell(0, 5, "", 0, 1)
         pdf.cell(0, 25, "were taken from the root of thoracic inlet till the posterior costophrenic recesses, at interval of 10mm.")
-        # os.remove("temp.png")
+        os.remove("temp.png")
 
-    pdf.output("./static/document.pdf")
+    pdf.output("document.pdf")
 
 def email_to_user(receiver_email):
     port = 465  # For SSL
@@ -166,7 +166,7 @@ def email_to_user(receiver_email):
     # Add body to email
     message.attach(MIMEText(body, "plain"))
 
-    filename = "./static/document.pdf"  # In same directory as script
+    filename = "document.pdf"  # In same directory as script
 
     # Open PDF file in binary mode
     with open(filename, "rb") as attachment:
@@ -192,7 +192,7 @@ def email_to_user(receiver_email):
         server.login("covaid.report@gmail.com", password)
         server.sendmail(sender_email, receiver_email, text)
     
-    # os.remove("./static/document.pdf")
+    os.remove("document.pdf")
 
 
 def model_result(ct_scan_blob):
@@ -294,7 +294,7 @@ def landing_page():
         return render_template('landing_page.html', saved=False)
 
 
-@app.route('/audio-form', methods=['GET','POST'])
+@app.route('/audio-form')
 def audio_form():
     return render_template('audio_form.html')
 
@@ -310,7 +310,7 @@ def audio_form_upload():
         text = r.recognize_google(audio_data)
         print(text, flush=True)
 
-    # os.remove(path_to_audio_file)
+    os.remove(path_to_audio_file)
     openai.api_key = "sk-2jRMD9G0ojitxcVNfUCtBaE6OVcrju2WQ4Xxs43w"
     res = openai.Classification.create(
         search_model="ada",
@@ -328,7 +328,7 @@ def audio_form_upload():
         labels=["Positive", "Negative"],
     )
 
-    email_ = "arshdeep74644@gmail.com"
+    email_ = request.form.get('email')
     age_ = "NA"
     gender_ = "NA"
 
@@ -338,9 +338,9 @@ def audio_form_upload():
         result = 0
 
     create_pdf("2", email_, age_, gender_, result, report_type="patient")
-    # email_to_user(email_)
+    email_to_user(email_)
 
-    return '', 200
+    return redirect(url_for('landing_page'))
 
 
 @app.route('/formimages')
